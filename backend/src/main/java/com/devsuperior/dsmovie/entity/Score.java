@@ -4,6 +4,7 @@ import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import java.util.Objects;
 
 @Entity
 @Table(name = "tb_score")
@@ -22,7 +23,28 @@ public class Score {
 		this.id = id;
 		this.value = value;
 	}
-	
+
+	@Override
+	public String toString() {
+		return "Score{" +
+				"id=" + id +
+				", value=" + value +
+				'}';
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof Score)) return false;
+		Score score = (Score) o;
+		return id.equals(score.id) && value.equals(score.value);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, value);
+	}
+
 	public void setMovie(Movie movie) {
 		id.setMovie(movie);
 	}
