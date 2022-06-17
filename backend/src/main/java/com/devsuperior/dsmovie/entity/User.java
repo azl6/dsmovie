@@ -5,6 +5,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.Objects;
 
 @Entity
 @Table(name = "tb_user")
@@ -22,6 +23,27 @@ public class User {
 	public User(Long id, String email) {
 		this.id = id;
 		this.email = email;
+	}
+
+	@Override
+	public String toString() {
+		return "User{" +
+				"id=" + id +
+				", email='" + email + '\'' +
+				'}';
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof User)) return false;
+		User user = (User) o;
+		return email.equals(user.email);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(email);
 	}
 
 	public Long getId() {

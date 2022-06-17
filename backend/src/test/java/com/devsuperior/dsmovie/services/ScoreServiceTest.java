@@ -52,8 +52,7 @@ class ScoreServiceTest {
         scoreDTO.setScore(4.5);
         scoreDTO.setEmail("alex@gmail.com");
 
-
-        user.setId(1L);
+        user.setId(null);
         user.setEmail(scoreDTO.getEmail());
 
         movie.setId(1L);
@@ -65,7 +64,6 @@ class ScoreServiceTest {
         score.setMovie(movie);
         score.setUser(user);
         score.setValue(4.5);
-
     }
 
     @Test
@@ -85,9 +83,24 @@ class ScoreServiceTest {
         then(movieRepository).should(times(1)).findById(scoreDTO.getMovieId());
         then(scoreRepository).should(times(1)).save(score);
         then(movieRepository).should(times(1)).save(movie);
-
-
         assertEquals("Movie 1", result.getTitle());
         assertEquals(null, result.getImage());
+    }
+
+    @Test
+    void saveScoreWhenUserIsNull(){
+        //given
+        given(userRepository.findByEmail(scoreDTO.getEmail())).willReturn(null);
+        given(userRepository.saveAndFlush(user)).willReturn(user);
+        given(movieRepository.findById(scoreDTO.getMovieId())).willReturn(Optional.of(movie));
+        given(scoreRepository.save(score)).willReturn(score);
+        given(movieRepository.save(movie)).willReturn(movie);
+
+        //when
+        MovieDTO response = scoreService.saveScore(scoreDTO);
+
+        //then
+        then(userRepository).should(times(1)).saveAndFlush(user);
+
     }
 }
