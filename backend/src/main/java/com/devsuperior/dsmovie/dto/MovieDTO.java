@@ -1,7 +1,9 @@
 package com.devsuperior.dsmovie.dto;
 
 import com.devsuperior.dsmovie.entity.Movie;
+import lombok.Builder;
 
+@Builder
 public class MovieDTO {
     private Long id;
     private String title;
