@@ -39,9 +39,6 @@ class MovieControllerTest {
     @MockBean
     MovieService movieService;
 
-    @MockBean
-    MovieRepository movieRepository;
-
     Pageable pageable = PageRequest.of(1, 2);
     List<Movie> movieList;
     Page<Movie> moviePage;
@@ -56,12 +53,12 @@ class MovieControllerTest {
 
         moviePage = new PageImpl<>(movieList, pageable, 1);
         moviePageDto = moviePage.map(x -> MovieDTO.builder()
-                                          .id(x.getId())
-                                          .title(x.getTitle())
-                                          .score(x.getScore())
-                                          .count(x.getCount())
-                                          .image(x.getImage())
-                                          .build());
+                .id(x.getId())
+                .title(x.getTitle())
+                .score(x.getScore())
+                .count(x.getCount())
+                .image(x.getImage())
+                .build());
 
         movieDTO = MovieDTO.builder().id(3L).title("Movie 3").build();
     }
@@ -69,7 +66,6 @@ class MovieControllerTest {
     @AfterEach
     void tearDown() {
         reset(movieService);
-        reset(movieRepository);
     }
 
     @Test
@@ -79,8 +75,8 @@ class MovieControllerTest {
 
         //when - then
         mockMvc.perform(MockMvcRequestBuilders.get("/movies")
-                    .param("page", String.valueOf(1))
-                    .param("size", String.valueOf(2)))
+                        .param("page", String.valueOf(1))
+                        .param("size", String.valueOf(2)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(jsonPath("$.content", hasSize(2)))
