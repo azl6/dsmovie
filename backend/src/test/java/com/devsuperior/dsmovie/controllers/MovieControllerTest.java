@@ -46,21 +46,24 @@ class MovieControllerTest {
     List<Movie> movieList;
     Page<Movie> moviePage;
     Page<MovieDTO> moviePageDto;
+    MovieDTO movieDTO;
 
     @BeforeEach
     void setUp() {
         movieList =
-                List.of(new Movie(null, "Movie 1", 4.0, 2, null),
-                        new Movie(null, "Movie 2", 3.3, 3, null));
+                List.of(new Movie(1L, "Movie 1", 4.0, 2, null),
+                        new Movie(2L, "Movie 2", 3.3, 3, null));
 
         moviePage = new PageImpl<>(movieList, pageable, 1);
-        moviePageDto = moviePage.map(x ->MovieDTO.builder()
-                                        .id(x.getId())
-                                        .title(x.getTitle())
-                                        .score(x.getScore())
-                                        .count(x.getCount())
-                                        .image(x.getImage())
-                                        .build());
+        moviePageDto = moviePage.map(x -> MovieDTO.builder()
+                                          .id(x.getId())
+                                          .title(x.getTitle())
+                                          .score(x.getScore())
+                                          .count(x.getCount())
+                                          .image(x.getImage())
+                                          .build());
+
+        movieDTO = MovieDTO.builder().id(3L).title("Movie 3").build();
     }
 
     @AfterEach
@@ -76,8 +79,8 @@ class MovieControllerTest {
 
         //when - then
         mockMvc.perform(MockMvcRequestBuilders.get("/movies")
-                        .param("page", String.valueOf(1))
-                        .param("size", String.valueOf(2)))
+                    .param("page", String.valueOf(1))
+                    .param("size", String.valueOf(2)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(jsonPath("$.content", hasSize(2)))
@@ -85,6 +88,14 @@ class MovieControllerTest {
     }
 
     @Test
-    void findById() {
+    void findById() throws Exception {
+        //given
+        given(movieService.findById(movieDTO.getId())).willReturn(movieDTO);
+
+        //when - then
+        mockMvc.perform(MockMvcRequestBuilders.get("/movies/" + 3L))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(jsonPath("$.title", is("Movie 3")));
     }
 }
