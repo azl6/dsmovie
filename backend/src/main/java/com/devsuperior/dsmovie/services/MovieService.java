@@ -3,6 +3,8 @@ package com.devsuperior.dsmovie.services;
 import com.devsuperior.dsmovie.dto.MovieDTO;
 import com.devsuperior.dsmovie.entity.Movie;
 import com.devsuperior.dsmovie.repositories.MovieRepository;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,6 +15,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@NoArgsConstructor
+@AllArgsConstructor
 public class MovieService {
 
     @Autowired
